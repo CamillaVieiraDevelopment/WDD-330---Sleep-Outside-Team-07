@@ -32,7 +32,12 @@ export default class ProductDetails {
   addToCart() {
     // This logic was previously in product.js
     // Encapsulation. It is good practice to keep everything related to product actions inside the class that manages it.
-    const cartItems = getLocalStorage("so-cart") || [];
+    let cartItems = getLocalStorage("so-cart");
+   
+    if (!cartItems) {
+      cartItems = [];
+    }
+   
     cartItems.push(this.product);
     setLocalStorage("so-cart", cartItems);
   }
@@ -66,4 +71,3 @@ export default class ProductDetails {
     element.insertAdjacentHTML("afterBegin", html);
   }
 }
-
