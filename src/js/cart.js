@@ -2,8 +2,16 @@ import { getLocalStorage } from "./utils.mjs";
 
 function renderCartContents() {
   const cartItems = getLocalStorage("so-cart");
-  const htmlItems = cartItems.map((item) => cartItemTemplate(item));
-  document.querySelector(".product-list").innerHTML = htmlItems.join("");
+  //verify if cartItems is null or is empty, we won't execute .map()
+
+  if (cartItems === null) {
+    // display a message if the cart is empty
+    document.querySelector(".product-list").innerHTML =
+      "<p><b>Your cart is empty</b></p>";
+  } else {
+    const htmlItems = cartItems.map((item) => cartItemTemplate(item));
+    document.querySelector(".product-list").innerHTML = htmlItems.join("");
+  }
 }
 
 function cartItemTemplate(item) {
