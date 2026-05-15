@@ -32,15 +32,17 @@ export default class ProductDetails {
   addToCart() {
     // This logic was previously in product.js
     // Encapsulation. It is good practice to keep everything related to product actions inside the class that manages it.
-    let cartItems = getLocalStorage("so-cart");
-   
-    if (!cartItems) {
-      cartItems = [];
+    addToCart() 
+      let cartItems = getLocalStorage("so-cart");
+
+      if (!cartItems) {
+        cartItems = [];
+      }
+
+      
+      cartItems.push(this.product);
+      setLocalStorage("so-cart", cartItems);
     }
-   
-    cartItems.push(this.product);
-    setLocalStorage("so-cart", cartItems);
-  }
 
 
   renderProductDetails(selector) {
