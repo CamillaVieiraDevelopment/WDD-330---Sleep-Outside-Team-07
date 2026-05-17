@@ -32,3 +32,16 @@ export function getParam(param) {
   const urlParams = new URLSearchParams(queryString);
   return urlParams.get(param);
 }
+
+export function renderListWithTemplate(template, parentElement, list, position = "afterbegin", clear = false) {
+  // 1. Primero preparamos todo el HTML en memoria
+  const htmlStrings = list.map(template);
+  
+  // 2. Si se solicitó limpiar, vaciamos el contenedor
+  if (clear) {
+    parentElement.innerHTML = "";
+  }
+
+  // 3. Finalmente, insertamos lo que ya teníamos preparado
+  parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
+}
