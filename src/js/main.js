@@ -1,11 +1,11 @@
-console.log("O JS do Main finalmente carregou!");
+// main.js
 import ProductData from "./ProductData.mjs";
 import ProductList from "./ProductList.mjs";
+import { loadHeaderFooter } from "./utils.mjs";
 
-// Instancia a fonte de dados e a lista [cite: 474, 490]
+loadHeaderFooter();
+
 const dataSource = new ProductData("tents");
-const listElement = document.querySelector(".product-list");
-
-const productList = new ProductList("tents", dataSource, listElement);
-
+const element = document.querySelector(".product-list");
+const productList = new ProductList("tents", dataSource, element);
 productList.init();
