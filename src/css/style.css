@@ -255,11 +255,6 @@ button {
     font-size: inherit;
     grid-template-columns: 150px auto 15%;
   }
-
-/* Hide elements Class*/
-.hide {
-  display: none;
-}
 }
 
 footer {
