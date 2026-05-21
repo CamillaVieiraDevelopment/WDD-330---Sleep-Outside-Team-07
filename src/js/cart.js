@@ -1,59 +1,52 @@
-import { getLocalStorage, setLocalStorage } from "./utils.mjs";
-
-function renderCartContents() {
-  const cartItems = getLocalStorage("so-cart");
-  const productListElement = document.querySelector(".product-list");
-
-  // Checks if the cart is null or empty
-  if (!cartItems || cartItems.length === 0) {
-    productListElement.innerHTML = "<p><b>Your cart is empty</b></p>";
-    // Hides the total footer if the cart is emptied
-    document.querySelector(".cart-footer").classList.add("hide");
-  } else {
-    // 1. Renders the cart items
-    const htmlItems = cartItems.map((item) => cartItemTemplate(item));
-    productListElement.innerHTML = htmlItems.join("");
-
-    // 2. Calculates the total by summing the FinalPrice of each item
-    const total = cartItems.reduce((sum, item) => sum + item.FinalPrice, 0);
-
-    // 3. Selects the elements created in the HTML
-    const cartFooter = document.querySelector(".cart-footer");
-    const cartTotalElement = document.querySelector(".cart-total");
-
-    // 4. Removes the 'hide' class to display the footer
-    cartFooter.classList.remove("hide");
-
-    // 5. Inserts the formatted total value
-    cartTotalElement.innerHTML = `Total: $${total.toFixed(2)}`;
-
-    // 6. Activates event listeners for the remove buttons
-    attachRemoveListeners();
-  }
-}
+import { getLocalStorage, setLocalStorage, loadHeaderFooter } from "./utils.mjs";
 
 function cartItemTemplate(item) {
-  // Inject the ❌ button containing the data-id of the corresponding product
-  const newItem = `<li class="cart-card divider">
-  <span class="cart-card__remove" data-id="${item.Id}">❌</span>
-  <a href="#" class="cart-card__image">
-    <img
-      src="${item.Image}"
-      alt="${item.Name}"
-    />
-  </a>
-  <a href="#">
-    <h2 class="card__name">${item.Name}</h2>
-  </a>
-  <p class="cart-card__color">${item.Colors[0].ColorName}</p>
-  <p class="cart-card__quantity">qty: 1</p>
-  <p class="cart-card__price">$${item.FinalPrice}</p>
-</li>`;
+  const imageUrl = item.Image?.replace(/^\.\.\//, "/") || "";
 
-  return newItem;
+  return `<li class="cart-card divider" data-id="${item.Id}">
+    <span class="cart-card__remove" data-id="${item.Id}">❌</span>
+    <a href="/product_pages/?product=${item.Id}" class="cart-card__image">
+      <img src="${imageUrl}" alt="${item.Name}" />
+    </a>
+    <a href="/product_pages/?product=${item.Id}">
+      <h2 class="card__name">${item.Name}</h2>
+    </a>
+    <p class="cart-card__color">${item.Colors?.[0]?.ColorName || ""}</p>
+    <p class="cart-card__quantity">qty: 1</p>
+    <p class="cart-card__price">$${item.FinalPrice}</p>
+  </li>`;
 }
 
-// Function to map all remove buttons and add the click event
+function renderCartContents() {
+  const cartItems = getLocalStorage("so-cart") || [];
+  const cartList = document.querySelector(".product-list.cart-list");
+  const totalElement = document.getElementById("cart-total");
+
+  if (!cartList) return;
+
+  // If the cart is empty
+  if (cartItems.length === 0) {
+    cartList.innerHTML = "<li><b>Your cart is empty</b></li>";
+    if (totalElement) totalElement.textContent = "0.00";
+    return;
+  }
+
+  // 1. Render items using the template with the X
+  const htmlItems = cartItems.map((item) => cartItemTemplate(item));
+  cartList.innerHTML = htmlItems.join("");
+
+  // 2. Calculate the total by summing the FinalPrice of each one
+  const total = cartItems.reduce((sum, item) => sum + item.FinalPrice, 0);
+
+  // 3. Insert the formatted total into Aaron's element
+  if (totalElement) {
+    totalElement.textContent = total.toFixed(2);
+  }
+
+  // 4. Activate the X button listeners
+  attachRemoveListeners();
+}
+
 function attachRemoveListeners() {
   const removeButtons = document.querySelectorAll(".cart-card__remove");
   removeButtons.forEach((button) => {
@@ -61,25 +54,21 @@ function attachRemoveListeners() {
   });
 }
 
-// Function responsible for removing the item from localStorage and updating the screen
 function removeFromCart(event) {
   const productId = event.target.getAttribute("data-id");
   let cartItems = getLocalStorage("so-cart") || [];
 
-  // Finds the index of the first item that matches the clicked ID
-  // Using findIndex + splice ensures that if there are duplicate items, we only remove one at a time
+  // Finds the index of the clicked item
   const itemIndex = cartItems.findIndex((item) => item.Id === productId);
 
   if (itemIndex !== -1) {
-    // Removes the specific item found at the array index
-    cartItems.splice(itemIndex, 1);
-
-    // Updates localStorage with the new item list
-    setLocalStorage("so-cart", cartItems);
-
-    // Re-renders the cart content to update the interface and total value instantly
-    renderCartContents();
+    cartItems.splice(itemIndex, 1); // Removes from the array
+    setLocalStorage("so-cart", cartItems); // Saves to LocalStorage
+    renderCartContents(); // Updates the screen and recalculates the total
   }
 }
 
-renderCartContents();
+// Ensures the Header/Footer is loaded before rendering the cart
+loadHeaderFooter().then(() => {
+  renderCartContents();
+});
