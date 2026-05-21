@@ -1,9 +1,10 @@
-import { getLocalStorage, renderListWithTemplate, loadHeaderFooter } from "./utils.mjs";
+import { getLocalStorage, setLocalStorage, loadHeaderFooter } from "./utils.mjs";
 
 function cartItemTemplate(item) {
-  // Ajuste de ruta de imagen (por si viene con "../")
   const imageUrl = item.Image?.replace(/^\.\.\//, "/") || "";
+
   return `<li class="cart-card divider" data-id="${item.Id}">
+    <span class="cart-card__remove" data-id="${item.Id}">❌</span>
     <a href="/product_pages/?product=${item.Id}" class="cart-card__image">
       <img src="${imageUrl}" alt="${item.Name}" />
     </a>
@@ -19,23 +20,55 @@ function cartItemTemplate(item) {
 function renderCartContents() {
   const cartItems = getLocalStorage("so-cart") || [];
   const cartList = document.querySelector(".product-list.cart-list");
+  const totalElement = document.getElementById("cart-total");
+
   if (!cartList) return;
 
+  // If the cart is empty
   if (cartItems.length === 0) {
     cartList.innerHTML = "<li><b>Your cart is empty</b></li>";
-    document.getElementById("cart-total").textContent = "0.00";
+    if (totalElement) totalElement.textContent = "0.00";
     return;
   }
 
-  // Renderizar los items
-  renderListWithTemplate(cartItemTemplate, cartList, cartItems, "afterbegin", true);
-  
-  // Calcular y mostrar el total
+  // 1. Render items using the template with the X
+  const htmlItems = cartItems.map((item) => cartItemTemplate(item));
+  cartList.innerHTML = htmlItems.join("");
+
+  // 2. Calculate the total by summing the FinalPrice of each one
   const total = cartItems.reduce((sum, item) => sum + item.FinalPrice, 0);
-  document.getElementById("cart-total").textContent = total.toFixed(2);
+
+  // 3. Insert the formatted total into Aaron's element
+  if (totalElement) {
+    totalElement.textContent = total.toFixed(2);
+  }
+
+  // 4. Activate the X button listeners
+  attachRemoveListeners();
 }
 
-// Cargar header y footer dinámicos
+function attachRemoveListeners() {
+  const removeButtons = document.querySelectorAll(".cart-card__remove");
+  removeButtons.forEach((button) => {
+    button.addEventListener("click", removeFromCart);
+  });
+}
+
+function removeFromCart(event) {
+  const productId = event.target.getAttribute("data-id");
+  let cartItems = getLocalStorage("so-cart") || [];
+
+  // Finds the index of the clicked item
+  const itemIndex = cartItems.findIndex((item) => item.Id === productId);
+
+  if (itemIndex !== -1) {
+    cartItems.splice(itemIndex, 1); // Removes from the array
+    setLocalStorage("so-cart", cartItems); // Saves to LocalStorage
+    renderCartContents(); // Updates the screen and recalculates the total
+  }
+}
+
+// Ensures the Header/Footer is loaded before rendering the cart
 loadHeaderFooter().then(() => {
   renderCartContents();
 });

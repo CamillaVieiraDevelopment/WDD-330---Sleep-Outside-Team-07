@@ -205,10 +205,10 @@ button {
 
 /* Start cart list card styles */
 .cart-card {
+  position: relative;
   display: grid;
   grid-template-columns: 25% auto 15%;
   font-size: var(--small-font);
-  /* max-height: 120px; */
   align-items: center;
 }
 
@@ -256,6 +256,22 @@ button {
     grid-template-columns: 150px auto 15%;
   }
 }
+
+.cart-card__remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  cursor: pointer;
+  font-size: 1.1em;
+  user-select: none;
+  transition: transform 0.2s ease;
+}
+
+.cart-card__remove:hover {
+  transform: scale(1.2);
+}
+
+
 
 footer {
   font-size: var(--small-font);
