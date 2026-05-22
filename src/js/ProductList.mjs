@@ -1,12 +1,10 @@
-// ProductList.mjs
 import { renderListWithTemplate } from "./utils.mjs";
 
 function productCardTemplate(product) {
-  // Ajustamos la ruta de la imagen: "../images/..." → "/images/..."
-  const imageUrl = product.Image.replace(/^\.\.\//, "/");
+  // we directly use the new API path
   return `<li class="product-card">
-    <a href="/product_pages/?product=${product.Id}">
-      <img src="${imageUrl}" alt="${product.NameWithoutBrand}">
+    <a href="../product_pages/index.html?product=${product.Id}">
+      <img src="${product.Images.PrimaryMedium}" alt="${product.NameWithoutBrand}">
       <h2 class="card__brand">${product.Brand.Name}</h2>
       <h3 class="card__name">${product.NameWithoutBrand}</h3>
       <p class="product-card__price">$${product.FinalPrice}</p>
@@ -22,7 +20,7 @@ export default class ProductList {
   }
 
   async init() {
-    const list = await this.dataSource.getData();
+    const list = await this.dataSource.getData(this.category);
     this.renderList(list);
   }
 
