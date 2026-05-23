@@ -1,13 +1,16 @@
 import ProductData from "./ProductData.mjs";
 import ProductList from "./ProductList.mjs";
-import { loadHeaderFooter } from "./utils.mjs";
+// Adicionado o 'getParam' para capturar o parâmetro da URL
+import { loadHeaderFooter, getParam } from "./utils.mjs";
 
-// Load the header and footer audio on this page as well.
 loadHeaderFooter();
 
-// Instantiates the data source and list for the tents category.
-const dataSource = new ProductData("tents");
+// Captura dinamicamente se é 'tents', 'backpacks', 'sleeping-bags' ou 'hammocks'
+const category = getParam("category");
+
+const dataSource = new ProductData();
 const listElement = document.querySelector(".product-list");
 
-const productList = new ProductList("tents", dataSource, listElement);
-productList.init();
+// Agora passamos a variável 'category' em vez do texto fixo "tents"!
+const myList = new ProductList(category, dataSource, listElement);
+myList.init();
