@@ -271,7 +271,46 @@ button {
   transform: scale(1.2);
 }
 
+/* ==========================================================================
+   Styles of Category Cards on the Home Page
+   ========================================================================== */
+.product-categories {
+  padding: 2rem 1rem;
+  text-align: center;
+}
 
+.category-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: var(--dark-grey);
+  transition: transform 0.2s ease-in-out;
+}
+
+.category-card:hover {
+  transform: scale(1.05);
+}
+
+.category-card img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
+}
+
+.category-card h3 {
+  font-size: var(--large-font);
+  margin: 0;
+}
 
 footer {
   font-size: var(--small-font);
