@@ -1,5 +1,16 @@
 import { getLocalStorage, setLocalStorage, loadHeaderFooter } from "./utils.mjs";
 
+// Function to update the cart count badge in the header
+export function updateCartCount() {
+  const cartItems = getLocalStorage("so-cart") || [];
+  const count = cartItems.length;
+  const badge = document.getElementById("cart-count");
+  if (badge) {
+    badge.textContent = count;
+    badge.style.display = count > 0 ? "flex" : "none";
+  }
+}
+
 function cartItemTemplate(item) {
   const imageUrl = item.Image?.replace(/^\.\.\//, "/") || "";
 
@@ -65,10 +76,12 @@ function removeFromCart(event) {
     cartItems.splice(itemIndex, 1); // Removes from the array
     setLocalStorage("so-cart", cartItems); // Saves to LocalStorage
     renderCartContents(); // Updates the screen and recalculates the total
+    updateCartCount(); // Updates the cart count badge
   }
 }
 
 // Ensures the Header/Footer is loaded before rendering the cart
 loadHeaderFooter().then(() => {
   renderCartContents();
+  updateCartCount();
 });

@@ -40,6 +40,12 @@ export default class ProductDetails {
    
     cartItems.push(this.product);
     setLocalStorage("so-cart", cartItems);
+
+    const badge = document.getElementById("cart-count");
+    if (badge) {
+      badge.textContent = cartItems.length;
+      badge.style.display = "flex";
+    }
   }
 
 
