@@ -3,7 +3,6 @@ import ProductList from "./ProductList.mjs";
 // Importamos loadHeaderFooter y también getParam para leer la URL
 import { loadHeaderFooter, getParam } from "./utils.mjs";
 
-
 loadHeaderFooter();
 
 // we get the category from the URL ?category=backpacks, guardará "backpacks")
@@ -17,14 +16,15 @@ productList.init();
 
 // change the title dinamically
 if (category) {
-    // convert sleeping-bags to sleeping bags
-    const formattedTitle = category
-        .split("-")
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(" ");
+  // convert sleeping-bags to sleeping bags
+  const formattedTitle = category
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 
-    const titleElement = document.querySelector(".products h2") || document.querySelector(".title");
-    if (titleElement) {
-        titleElement.innerHTML = `Top Products: ${formattedTitle}`;
-    }
+  const titleElement =
+    document.querySelector(".products h2") || document.querySelector(".title");
+  if (titleElement) {
+    titleElement.innerHTML = `Top Products: ${formattedTitle}`;
+  }
 }

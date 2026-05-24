@@ -1,7 +1,11 @@
-import { getLocalStorage, setLocalStorage, loadHeaderFooter } from "./utils.mjs";
+import {
+  getLocalStorage,
+  setLocalStorage,
+  loadHeaderFooter,
+} from "./utils.mjs";
 
 function cartItemTemplate(item) {
-  const imageUrl = item.Image?.replace(/^\.\.\//, "/") || "";
+  const imageUrl = item.Images?.PrimaryMedium || "";
 
   return `<li class="cart-card divider" data-id="${item.Id}">
     <span class="cart-card__remove" data-id="${item.Id}">❌</span>

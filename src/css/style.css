@@ -271,13 +271,10 @@ button {
   transform: scale(1.2);
 }
 
-
-
 footer {
   font-size: var(--small-font);
   padding: 1em;
 }
-
 
 /* styles for the tents, sleepingbags. svg in the src.index.html */
 .category-grid {
@@ -305,5 +302,7 @@ footer {
 }
 
 .category-card img:hover {
-  transform: scale(1.1); /* Hace que el icono crezca un poquito al pasar el mouse */
+  transform: scale(
+    1.1
+  ); /* Hace que el icono crezca un poquito al pasar el mouse */
 }
