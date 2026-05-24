@@ -1,6 +1,4 @@
-// main.js
-import ProductData from "./ProductData.mjs";
-import ProductList from "./ProductList.mjs";
+// Home page now only initializes global components
 import { loadHeaderFooter } from "./utils.mjs";
 import { updateCartCount } from "./cart.js";
 
@@ -8,7 +6,3 @@ loadHeaderFooter().then(() => {
   updateCartCount();
 });
 
-const dataSource = new ProductData("tents");
-const element = document.querySelector(".product-list");
-const productList = new ProductList("tents", dataSource, element);
-productList.init();

@@ -14,10 +14,8 @@ loadHeaderFooter().then(() => {
 const productId = getParam("product");
 const dataSource = new ProductData("tents");
 
-
 // Create an instance of our new class, passing the ID and the data access layer
 const product = new ProductDetails(productId, dataSource);
-
 
 // We start the process of fetching data and rendering the screen
 product.init();

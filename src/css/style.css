@@ -293,9 +293,38 @@ button {
   transform: scale(1.2);
 }
 
-
-
 footer {
   font-size: var(--small-font);
   padding: 1em;
+}
+
+/* styles for the tents, sleepingbags. svg in the src.index.html */
+.category-grid {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin: 2rem 0;
+}
+
+.category-card {
+  text-decoration: none;
+  color: #303030;
+  text-align: center;
+  flex: 1;
+  min-width: 120px;
+  max-width: 200px;
+  padding-bottom: 60vh;
+}
+
+.category-card img {
+  width: 100px;
+  height: 100px;
+  transition: transform 0.2s ease;
+}
+
+.category-card img:hover {
+  transform: scale(
+    1.1
+  ); /* Hace que el icono crezca un poquito al pasar el mouse */
 }

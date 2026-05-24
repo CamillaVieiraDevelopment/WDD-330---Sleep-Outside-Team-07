@@ -1,4 +1,8 @@
-import { getLocalStorage, setLocalStorage, loadHeaderFooter } from "./utils.mjs";
+import {
+  getLocalStorage,
+  setLocalStorage,
+  loadHeaderFooter,
+} from "./utils.mjs";
 
 // Function to update the cart count badge in the header
 export function updateCartCount() {
@@ -12,7 +16,7 @@ export function updateCartCount() {
 }
 
 function cartItemTemplate(item) {
-  const imageUrl = item.Image?.replace(/^\.\.\//, "/") || "";
+  const imageUrl = item.Images?.PrimaryMedium || "";
 
   return `<li class="cart-card divider" data-id="${item.Id}">
     <span class="cart-card__remove" data-id="${item.Id}">❌</span>
@@ -85,3 +89,4 @@ loadHeaderFooter().then(() => {
   renderCartContents();
   updateCartCount();
 });
+
