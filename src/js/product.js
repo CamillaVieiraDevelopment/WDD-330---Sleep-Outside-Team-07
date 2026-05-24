@@ -4,8 +4,11 @@ import { getParam } from "./utils.mjs";
 import ProductData from "./ProductData.mjs";
 import ProductDetails from "./ProductDetails.mjs";
 import { loadHeaderFooter } from "./utils.mjs";
+import { updateCartCount } from "./cart.js";
 
-loadHeaderFooter();
+loadHeaderFooter().then(() => {
+  updateCartCount();
+});
 
 //Retrieve the ID from the URL (e.g., 880RR)
 const productId = getParam("product");
