@@ -108,6 +108,8 @@ button {
   border: 0;
   font-size: var(--large-font);
   cursor: pointer;
+
+  transition: filter 0.3s ease;
 }
 
 .divider {
@@ -327,4 +329,19 @@ footer {
   transform: scale(
     1.1
   ); /* Hace que el icono crezca un poquito al pasar el mouse */
+}
+
+
+/* Button efects */
+
+/* 1. EFECTO HOVER: Cuando el usuario pasa el cursor por encima */
+#addToCart:hover {
+  /* Usamos filter para oscurecer automáticamente tu --secondary-color un 15% */
+  filter: brightness(85%); 
+}
+
+/* 2. EFECTO CLICK (ACTIVE): Cuando el usuario lo presiona físicamente */
+#addToCart:active {
+  transform: scale(0.98); /* El botón se encoge un "pelito", simulando el "clic" */
+  transition: transform 0.09s ease; /* Hace que el hundimiento sea instantáneo */
 }
