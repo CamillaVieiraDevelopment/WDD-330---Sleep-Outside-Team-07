@@ -29,7 +29,7 @@ export default class ProductDetails {
   }
 
 
-  addToCart() {
+ /*  addToCart() {
     // This logic was previously in product.js
     // Encapsulation. It is good practice to keep everything related to product actions inside the class that manages it.
     let cartItems = getLocalStorage("so-cart");
@@ -46,8 +46,36 @@ export default class ProductDetails {
       badge.textContent = cartItems.length;
       badge.style.display = "flex";
     }
-  }
+  } */
+addToCart() {
+    // This logic was previously in product.js
+    // Encapsulation. It is good practice to keep everything related to product actions inside the class that manages it.
+    let cartItems = getLocalStorage("so-cart") || [];
+    
+    // 1. Check if the item is already in the cart using its ID
+    const existingItem = cartItems.find((item) => item.Id === this.product.Id);
 
+    if (existingItem) {
+      // 2. If it exists, increment its quantity
+      existingItem.Quantity = (existingItem.Quantity || 1) + 1;
+    } else {
+      // 3. If it's a new item, assign Quantity = 1 and push it
+      this.product.Quantity = 1;
+      cartItems.push(this.product);
+    }
+    
+    // 4. Save the updated array back to LocalStorage
+    setLocalStorage("so-cart", cartItems);
+
+    // 5. Update the visual badge with the total quantity of items
+    const badge = document.getElementById("cart-count");
+    if (badge) {
+      // Calculate total physical items using reduce
+      const totalQuantity = cartItems.reduce((total, item) => total + (item.Quantity || 1), 0);
+      badge.textContent = totalQuantity;
+      badge.style.display = "flex";
+    }
+  }
 
   renderProductDetails(selector) {
     // Generates HTML using the properties of this.product object

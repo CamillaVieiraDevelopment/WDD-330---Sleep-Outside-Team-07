@@ -7,11 +7,12 @@ import {
 // Function to update the cart count badge in the header
 export function updateCartCount() {
   const cartItems = getLocalStorage("so-cart") || [];
-  const count = cartItems.length;
+  // CAMBIO: Sumar la propiedad Quantity de cada artículo en lugar de usar .length
+  const totalCount = cartItems.reduce((sum, item) => sum + (item.Quantity || 1), 0);
   const badge = document.getElementById("cart-count");
   if (badge) {
-    badge.textContent = count;
-    badge.style.display = count > 0 ? "flex" : "none";
+    badge.textContent = totalCount;
+    badge.style.display = totalCount > 0 ? "flex" : "none";
   }
 }
 
@@ -27,7 +28,9 @@ function cartItemTemplate(item) {
       <h2 class="card__name">${item.Name}</h2>
     </a>
     <p class="cart-card__color">${item.Colors?.[0]?.ColorName || ""}</p>
-    <p class="cart-card__quantity">qty: 1</p>
+    
+    <p class="cart-card__quantity">qty: ${item.Quantity || 1}</p>
+    
     <p class="cart-card__price">$${item.FinalPrice}</p>
   </li>`;
 }
@@ -50,8 +53,8 @@ function renderCartContents() {
   const htmlItems = cartItems.map((item) => cartItemTemplate(item));
   cartList.innerHTML = htmlItems.join("");
 
-  // 2. Calculate the total by summing the FinalPrice of each one
-  const total = cartItems.reduce((sum, item) => sum + item.FinalPrice, 0);
+  // 2. CAMBIO: Calcular el total multiplicando el FinalPrice por la Quantity de cada artículo
+  const total = cartItems.reduce((sum, item) => sum + (item.FinalPrice * (item.Quantity || 1)), 0);
 
   // 3. Insert the formatted total into Aaron's element
   if (totalElement) {
@@ -77,7 +80,13 @@ function removeFromCart(event) {
   const itemIndex = cartItems.findIndex((item) => item.Id === productId);
 
   if (itemIndex !== -1) {
-    cartItems.splice(itemIndex, 1); // Removes from the array
+    // TIP DE UX: Si la cantidad es mayor a 1, restamos uno en vez de eliminar la fila completa
+    if (cartItems[itemIndex].Quantity > 1) {
+      cartItems[itemIndex].Quantity -= 1;
+    } else {
+      cartItems.splice(itemIndex, 1); // Si solo quedaba uno, removemos la fila
+    }
+    
     setLocalStorage("so-cart", cartItems); // Saves to LocalStorage
     renderCartContents(); // Updates the screen and recalculates the total
     updateCartCount(); // Updates the cart count badge
@@ -89,4 +98,3 @@ loadHeaderFooter().then(() => {
   renderCartContents();
   updateCartCount();
 });
-
