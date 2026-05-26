@@ -29,10 +29,12 @@
           </fieldset>
 
           <fieldset>
-            <legend>Payment</legend>
-            <label>Card Number: <input type="text" name="cardNumber" required></label>
-            <label>Expiration Date: <input type="text" name="expiration" placeholder="MM/YY" required></label>
-            <label>Security Code: <input type="text" name="code" required></label>
+            <fieldset>
+              <legend>Payment</legend>
+              <label>Card Number: <input type="text" name="cardNumber" value="1234123412341234" required></label>
+              <label>Expiration Date: <input type="text" name="expiration" placeholder="MM/YY" required></label>
+              <label>Security Code: <input type="text" name="code" value="123" required></label>
+            </fieldset>
           </fieldset>
 
           <button type="submit" id="checkout-submit">Checkout</button>
