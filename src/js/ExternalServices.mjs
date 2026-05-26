@@ -1,4 +1,4 @@
-// ProductData.mjs
+// ExternalServices.mjs
 function convertToJson(res) {
   if (res.ok) {
     return res.json();
@@ -7,7 +7,7 @@ function convertToJson(res) {
   }
 }
 
-export default class ProductData {
+export default class ExternalServices {
   constructor(category) {
     this.category = category;
     this.path = `/json/${this.category}.json`;  // ← cambio clave
