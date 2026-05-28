@@ -1,14 +1,12 @@
 :root {
   --font-body: Arial, Helvetica, sans-serif;
   --font-headline: Haettenschweiler, "Arial Narrow Bold", sans-serif;
-  /* colors */
   --primary-color: #f0a868;
   --secondary-color: #525b0f;
   --tertiary-color: #8a470c;
   --light-grey: #d0d0d0;
   --dark-grey: #303030;
 
-  /* sizes */
   --font-base: 18px;
   --small-font: 0.8em;
   --large-font: 1.2em;
@@ -287,7 +285,6 @@ button {
   right: 8px;
   cursor: pointer;
   font-size: 1.1em;
-  user-select: none;
   transition: transform 0.2s ease;
 }
 
@@ -300,7 +297,6 @@ footer {
   padding: 1em;
 }
 
-/* styles for the tents, sleepingbags. svg in the src.index.html */
 .category-grid {
   display: flex;
   justify-content: space-around;
@@ -328,20 +324,81 @@ footer {
 .category-card img:hover {
   transform: scale(
     1.1
-  ); /* Hace que el icono crezca un poquito al pasar el mouse */
+  ); 
 }
 
 
-/* Button efects */
 
-/* 1. EFECTO HOVER: Cuando el usuario pasa el cursor por encima */
 #addToCart:hover {
-  /* Usamos filter para oscurecer automáticamente tu --secondary-color un 15% */
   filter: brightness(85%); 
 }
 
-/* 2. EFECTO CLICK (ACTIVE): Cuando el usuario lo presiona físicamente */
 #addToCart:active {
-  transform: scale(0.98); /* El botón se encoge un "pelito", simulando el "clic" */
-  transition: transform 0.09s ease; /* Hace que el hundimiento sea instantáneo */
+  transform: scale(0.98);  
+  transition: transform 0.09s ease; 
+}
+.alert-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.alert {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  border-radius: 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.alert + .alert {
+  border-top: 1px solid rgba(255,255,255,0.2);
+}
+.alert-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.alert {
+  position: relative;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: 0.75rem 2rem 0.75rem 1rem;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-bottom: 0.5rem;
+}
+
+.alert:last-child {
+  margin-bottom: 0;
+}
+
+.alert-close {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: inherit;
+  opacity: 0.7;
+  padding: 0;
+  margin: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+}
+
+.alert-close:hover {
+  opacity: 1;
+  transform: translateY(-50%) scale(1.1);
 }
