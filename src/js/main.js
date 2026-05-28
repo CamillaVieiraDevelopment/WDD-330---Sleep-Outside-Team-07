@@ -10,5 +10,8 @@ loadHeaderFooter().then(() => {
 
 const dataSource = new ExternalServices("tents");
 const element = document.querySelector(".product-list");
-const productList = new ProductList("tents", dataSource, element);
-productList.init();
+
+if (element) {
+  const productList = new ProductList("tents", dataSource, element);
+  productList.init();
+}
