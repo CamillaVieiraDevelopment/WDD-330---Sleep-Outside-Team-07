@@ -1,5 +1,5 @@
 import { loadHeaderFooter } from "./utils.mjs";
-import CheckoutProcess from "./CheckoutProcess.mjs";
+import CheckoutProcess from "./checkoutprocess.mjs";
 
 // Ensures the header and footer load before initiating the checkout
 loadHeaderFooter().then(() => {
