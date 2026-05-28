@@ -7,7 +7,6 @@ import {
 // Function to update the cart count badge in the header
 export function updateCartCount() {
   const cartItems = getLocalStorage("so-cart") || [];
-  // CAMBIO: Sumar la propiedad Quantity de cada artículo en lugar de usar .length
   const totalCount = cartItems.reduce((sum, item) => sum + (item.Quantity || 1), 0);
   const badge = document.getElementById("cart-count");
   if (badge) {
@@ -38,14 +37,16 @@ function cartItemTemplate(item) {
 function renderCartContents() {
   const cartItems = getLocalStorage("so-cart") || [];
   const cartList = document.querySelector(".product-list.cart-list");
-  const totalElement = document.getElementById("cart-total");
+  const totalElements = document.querySelectorAll(".cart-total span, #cart-total");
+  const cartFooter = document.querySelector(".cart-footer");
 
   if (!cartList) return;
 
   // If the cart is empty
   if (cartItems.length === 0) {
     cartList.innerHTML = "<li><b>Your cart is empty</b></li>";
-    if (totalElement) totalElement.textContent = "0.00";
+    totalElements.forEach(el => el.textContent = "0.00");
+    if (cartFooter) cartFooter.classList.add("hid");
     return;
   }
 
@@ -53,12 +54,15 @@ function renderCartContents() {
   const htmlItems = cartItems.map((item) => cartItemTemplate(item));
   cartList.innerHTML = htmlItems.join("");
 
-  // 2. CAMBIO: Calcular el total multiplicando el FinalPrice por la Quantity de cada artículo
+  // 2. Calcular el total multiplicando el FinalPrice por la Quantity de cada artículo
   const total = cartItems.reduce((sum, item) => sum + (item.FinalPrice * (item.Quantity || 1)), 0);
 
-  // 3. Insert the formatted total into Aaron's element
-  if (totalElement) {
-    totalElement.textContent = total.toFixed(2);
+  // 3. Insert the formatted total into all total elements safely
+  totalElements.forEach(el => el.textContent = total.toFixed(2));
+
+  // CORREÇÃO: Mostra o rodapé com o botão de checkout removendo a classe 'hid'
+  if (cartFooter) {
+    cartFooter.classList.remove("hid");
   }
 
   // 4. Activate the X button listeners
@@ -76,20 +80,18 @@ function removeFromCart(event) {
   const productId = event.target.getAttribute("data-id");
   let cartItems = getLocalStorage("so-cart") || [];
 
-  // Finds the index of the clicked item
   const itemIndex = cartItems.findIndex((item) => item.Id === productId);
 
   if (itemIndex !== -1) {
-    // TIP DE UX: Si la cantidad es mayor a 1, restamos uno en vez de eliminar la fila completa
     if (cartItems[itemIndex].Quantity > 1) {
       cartItems[itemIndex].Quantity -= 1;
     } else {
-      cartItems.splice(itemIndex, 1); // Si solo quedaba uno, removemos la fila
+      cartItems.splice(itemIndex, 1);
     }
-    
-    setLocalStorage("so-cart", cartItems); // Saves to LocalStorage
-    renderCartContents(); // Updates the screen and recalculates the total
-    updateCartCount(); // Updates the cart count badge
+
+    setLocalStorage("so-cart", cartItems);
+    renderCartContents();
+    updateCartCount();
   }
 }
 
