@@ -13,14 +13,14 @@ loadHeaderFooter().then(() => {
         zipInput.addEventListener("blur", () => {
             checkout.calculateOrderTotal();
         });
+    }
 
-        const form = document.getElementById("checkout-form");
-        if (form) {
-            form.addEventListener("submit", (event) => {
-                event.preventDefault();
-                checkout.checkout(form);
-            });
-       
-        }
+    // CORREÇÃO: Escuta o evento submit do formulário de maneira independente do zipInput
+    const form = document.getElementById("checkout-form");
+    if (form) {
+        form.addEventListener("submit", (event) => {
+            event.preventDefault();
+            checkout.checkout(form);
+        });
     }
 });
