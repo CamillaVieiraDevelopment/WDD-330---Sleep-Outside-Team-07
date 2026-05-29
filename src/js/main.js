@@ -4,5 +4,5 @@ import { updateCartCount } from "./cart.js";
 
 loadHeaderFooter().then(() => {
   updateCartCount();
-});
+})
 
