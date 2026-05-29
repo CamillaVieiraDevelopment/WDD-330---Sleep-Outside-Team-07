@@ -27,8 +27,16 @@ function cartItemTemplate(item) {
       <h2 class="card__name">${item.Name}</h2>
     </a>
     <p class="cart-card__color">${item.Colors?.[0]?.ColorName || ""}</p>
-    
-    <p class="cart-card__quantity">qty: ${item.Quantity || 1}</p>
+
+    <div class="cart-card__quantity-controls">
+      <button class="quantity-btn decrease" data-id="${item.Id}">-</button>
+  
+      <span class="cart-card__quantity">
+        qty: ${item.Quantity || 1}
+      </span>
+
+      <button class="quantity-btn increase" data-id="${item.Id}">+</button>
+    </div>
     
     <p class="cart-card__price">$${item.FinalPrice}</p>
   </li>`;
@@ -65,8 +73,56 @@ function renderCartContents() {
     cartFooter.classList.remove("hid");
   }
 
-  // 4. Activate the X button listeners
+  // 4. Activate the X and quantity button listeners
   attachRemoveListeners();
+  attachQuantityListeners();
+
+  function attachQuantityListeners() {
+    const increaseButtons = document.querySelectorAll(".increase");
+    const decreaseButtons = document.querySelectorAll(".decrease");
+
+    increaseButtons.forEach((button) => {
+      button.addEventListener("click", increaseQuantity);
+    });
+
+    decreaseButtons.forEach((button) => {
+      button.addEventListener("click", decreaseQuantity);
+    });
+  }
+
+  function increaseQuantity(event) {
+    const productId = event.target.getAttribute("data-id");
+    let cartItems = getLocalStorage("so-cart") || [];
+
+    const item = cartItems.find((item) => item.Id === productId);
+
+    if (item) {
+      item.Quantity = (item.Quantity || 1) + 1;
+    }
+
+    setLocalStorage("so-cart", cartItems);
+    renderCartContents();
+    updateCartCount();
+  }
+
+  function decreaseQuantity(event) {
+    const productId = event.target.getAttribute("data-id");
+    let cartItems = getLocalStorage("so-cart") || [];
+
+    const itemIndex = cartItems.findIndex((item) => item.Id === productId);
+
+    if (itemIndex !== -1) {
+      if (cartItems[itemIndex].Quantity > 1) {
+        cartItems[itemIndex].Quantity -= 1;
+      } else {
+        cartItems.splice(itemIndex, 1);
+      }
+    }
+
+    setLocalStorage("so-cart", cartItems);
+    renderCartContents();
+    updateCartCount();
+  }
 }
 
 function attachRemoveListeners() {
