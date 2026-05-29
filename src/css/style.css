@@ -229,11 +229,15 @@ button {
 
 /* Start cart list card styles */
 .cart-card {
-  position: relative;
   display: grid;
-  grid-template-columns: 25% auto 15%;
-  font-size: var(--small-font);
+  grid-template-columns:
+    140px
+    1fr
+    120px
+    40px;
+  gap: 10px;
   align-items: center;
+  padding: 15px 0;
 }
 
 .cart-card__image {
@@ -265,6 +269,27 @@ button {
   grid-column: 3;
 }
 
+.cart-card__quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.quantity-btn {
+  background-color: #ddd;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  border-radius: 5px;
+}
+
+.quantity-btn:hover {
+  background-color: #bbb;
+}
+
+
+
 @media screen and (min-width: 500px) {
   body {
     max-width: 1080px;
@@ -282,11 +307,12 @@ button {
 }
 
 .cart-card__remove {
-  position: absolute;
-  top: 8px;
-  right: 8px;
+  grid-column: 4;
+  grid-row: 1;
   cursor: pointer;
-  font-size: 1.1em;
+  font-size: 1.4em;
+  justify-self: center;
+  align-self: start;
   user-select: none;
   transition: transform 0.2s ease;
 }
@@ -331,17 +357,18 @@ footer {
   ); /* Hace que el icono crezca un poquito al pasar el mouse */
 }
 
-
 /* Button efects */
 
 /* 1. EFECTO HOVER: Cuando el usuario pasa el cursor por encima */
 #addToCart:hover {
   /* Usamos filter para oscurecer automáticamente tu --secondary-color un 15% */
-  filter: brightness(85%); 
+  filter: brightness(85%);
 }
 
 /* 2. EFECTO CLICK (ACTIVE): Cuando el usuario lo presiona físicamente */
 #addToCart:active {
-  transform: scale(0.98); /* El botón se encoge un "pelito", simulando el "clic" */
+  transform: scale(
+    0.98
+  ); /* El botón se encoge un "pelito", simulando el "clic" */
   transition: transform 0.09s ease; /* Hace que el hundimiento sea instantáneo */
 }
