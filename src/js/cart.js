@@ -29,7 +29,7 @@ function renderCartContents() {
 
   // Renderizar los items
   renderListWithTemplate(cartItemTemplate, cartList, cartItems, "afterbegin", true);
-  
+
   // Calcular y mostrar el total
   const total = cartItems.reduce((sum, item) => sum + item.FinalPrice, 0);
   document.getElementById("cart-total").textContent = total.toFixed(2);

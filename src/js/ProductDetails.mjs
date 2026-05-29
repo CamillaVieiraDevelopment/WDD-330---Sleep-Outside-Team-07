@@ -14,7 +14,7 @@ export default class ProductDetails {
     // Fetches the specific product details using the ID
     // To load the full data (name, price, image) BEFORE attempting to render the HTML on the screen.
     this.product = await this.dataSource.findProductById(this.productId);
-   
+
     // Renders the HTML on the page
     // Inject the content inside the <main> tag
     this.renderProductDetails("main");
@@ -33,11 +33,11 @@ export default class ProductDetails {
     // This logic was previously in product.js
     // Encapsulation. It is good practice to keep everything related to product actions inside the class that manages it.
     let cartItems = getLocalStorage("so-cart");
-   
+
     if (!cartItems) {
       cartItems = [];
     }
-   
+
     cartItems.push(this.product);
     setLocalStorage("so-cart", cartItems);
   }
@@ -47,7 +47,7 @@ export default class ProductDetails {
     // Generates HTML using the properties of this.product object
     // This replaces the need for files like "marmot-ajax-3.html". The data comes from JSON and fills this template.
     const element = document.querySelector(selector);
-   
+
     // Property names (Brand.Name, NameWithoutBrand, etc.) are based on the structure of your JSON file.
     const html = `
       <section class="product-detail">
@@ -67,7 +67,7 @@ export default class ProductDetails {
           <button id="addToCart" data-id="${this.product.Id}">Add to Cart</button>
         </div>
       </section>`;
-     
+
     element.insertAdjacentHTML("afterBegin", html);
   }
 }
