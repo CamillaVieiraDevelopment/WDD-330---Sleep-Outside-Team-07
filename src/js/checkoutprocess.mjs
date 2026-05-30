@@ -40,15 +40,15 @@ export default class CheckoutProcess {
     }
 
     calculateOrderTotal() {
-        const totalItems = this.list.reduce((sum, item) => sum + (item.Quantity || 1), 0);
-        if (totalItems > 0) {
-            this.shipping = 10 + (totalItems - 1) * 2;
-        } else {
-            this.shipping = 0;
-        }
-        this.tax = this.itemTotal * 0.06;
-        this.orderTotal = this.itemTotal + this.shipping + this.tax;
-        this.displayOrderTotals();
+    const totalItems = this.list.reduce((sum, item) => sum + (item.Quantity || 1), 0);
+    if (totalItems > 0) {
+        this.shipping = 10 + (totalItems - 1) * 2;
+    } else {
+        this.shipping = 0;
+    }
+    this.tax = this.itemTotal * 0.06;
+    this.orderTotal = this.itemTotal + this.shipping + this.tax;
+    this.displayOrderTotals();
     }
 
     displayOrderTotals() {
