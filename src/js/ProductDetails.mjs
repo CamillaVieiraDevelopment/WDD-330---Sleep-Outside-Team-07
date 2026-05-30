@@ -14,7 +14,7 @@ export default class ProductDetails {
     // Fetches the specific product details using the ID
     // To load the full data (name, price, image) BEFORE attempting to render the HTML on the screen.
     this.product = await this.dataSource.findProductById(this.productId);
-   
+
     // Renders the HTML on the page
     // Inject the content inside the <main> tag
     this.renderProductDetails("main");
@@ -29,29 +29,11 @@ export default class ProductDetails {
   }
 
 
- /*  addToCart() {
-    // This logic was previously in product.js
-    // Encapsulation. It is good practice to keep everything related to product actions inside the class that manages it.
-    let cartItems = getLocalStorage("so-cart");
-   
-    if (!cartItems) {
-      cartItems = [];
-    }
-   
-    cartItems.push(this.product);
-    setLocalStorage("so-cart", cartItems);
-
-    const badge = document.getElementById("cart-count");
-    if (badge) {
-      badge.textContent = cartItems.length;
-      badge.style.display = "flex";
-    }
-  } */
-addToCart() {
+  addToCart() {
     // This logic was previously in product.js
     // Encapsulation. It is good practice to keep everything related to product actions inside the class that manages it.
     let cartItems = getLocalStorage("so-cart") || [];
-    
+
     // 1. Check if the item is already in the cart using its ID
     const existingItem = cartItems.find((item) => item.Id === this.product.Id);
 
@@ -63,7 +45,7 @@ addToCart() {
       this.product.Quantity = 1;
       cartItems.push(this.product);
     }
-    
+
     // 4. Save the updated array back to LocalStorage
     setLocalStorage("so-cart", cartItems);
 
@@ -75,13 +57,32 @@ addToCart() {
       badge.textContent = totalQuantity;
       badge.style.display = "flex";
     }
+
+    // 6. Micro-interaction: Change button feedback locally immediately upon click
+    const addToCartBtn = document.getElementById("addToCart");
+    if (addToCartBtn) {
+      // Keep track of the original string ("Add to Cart")
+      const originalText = addToCartBtn.innerText;
+
+      // Transform button to success state
+      addToCartBtn.innerText = "Added to Cart! 🛒";
+      addToCartBtn.classList.add("btn-added");
+      addToCartBtn.disabled = true; // Temporary disable lock to prevent quick duplicate clicks
+
+      // Revert the button styles back to normal after 2 seconds
+      setTimeout(() => {
+        addToCartBtn.innerText = originalText;
+        addToCartBtn.classList.remove("btn-added");
+        addToCartBtn.disabled = false;
+      }, 2000);
+    }
   }
 
   renderProductDetails(selector) {
     // Generates HTML using the properties of this.product object
     // This replaces the need for files like "marmot-ajax-3.html". The data comes from JSON and fills this template.
     const element = document.querySelector(selector);
-   
+
     // Property names (Brand.Name, NameWithoutBrand, etc.) are based on the structure of your JSON file.
     const html = `
       <section class="product-detail">
@@ -101,7 +102,7 @@ addToCart() {
           <button id="addToCart" data-id="${this.product.Id}">Add to Cart</button>
         </div>
       </section>`;
-     
+
     element.insertAdjacentHTML("afterBegin", html);
   }
 }

@@ -372,3 +372,12 @@ footer {
   ); /* El botón se encoge un "pelito", simulando el "clic" */
   transition: transform 0.09s ease; /* Hace que el hundimiento sea instantáneo */
 }
+
+/* Temporary State for add item to the cart */
+.btn-added {
+  background-color: #d97706 !important;
+  color: #ffffff !important;
+  transform: scale(1.03);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
