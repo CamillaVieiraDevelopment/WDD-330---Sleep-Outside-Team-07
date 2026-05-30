@@ -85,7 +85,7 @@ export default class CheckoutProcess {
             localStorage.removeItem(this.key);
 
             // Redirects the user to the created success page
-            window.location.href = "success.html";
+            window.location.href = "/checkout/success.html"; 
         } catch (error) {
             console.error("Captured error:", error);
 
