@@ -1,10 +1,8 @@
-import { getLocalStorage } from "./utils.mjs";
+import { getLocalStorage, alertMessage } from "./utils.mjs";
 import ExternalServices from "./ExternalServices.mjs";
 
-// Instancia os serviços externos para fazer o POST depois
 const services = new ExternalServices();
 
-// Função auxiliar (Passo 6.1) para transformar o carrinho no formato que a API exige
 function packageItems(items) {
     return items.map((item) => ({
         id: item.Id,
@@ -35,7 +33,6 @@ export default class CheckoutProcess {
             (sum, item) => sum + ((item.FinalPrice || item.Price) * (item.Quantity || 1)),
             0
         );
-
         const subtotalElement = document.querySelector(`${this.outputSelector} #subtotal`);
         if (subtotalElement) {
             subtotalElement.innerText = `$${this.itemTotal.toFixed(2)}`;
@@ -44,16 +41,13 @@ export default class CheckoutProcess {
 
     calculateOrderTotal() {
         const totalItems = this.list.reduce((sum, item) => sum + (item.Quantity || 1), 0);
-
         if (totalItems > 0) {
             this.shipping = 10 + (totalItems - 1) * 2;
         } else {
             this.shipping = 0;
         }
-
         this.tax = this.itemTotal * 0.06;
         this.orderTotal = this.itemTotal + this.shipping + this.tax;
-
         this.displayOrderTotals();
     }
 
@@ -67,18 +61,12 @@ export default class CheckoutProcess {
         if (totalElement) totalElement.innerText = `$${this.orderTotal.toFixed(2)}`;
     }
 
-    // Prepare and send the form data to the server 
-    // Método de checkout atualizado para evitar erros de validação
     async checkout(formElement) {
-        // CORREÇÃO CRÍTICA: Garante que os totais estejam calculados antes de enviar,
-        // mesmo que o usuário não tenha disparado o evento 'blur' no campo de CEP.
         this.calculateOrderTotal();
 
-        // Converte os campos preenchidos do formulário em um objeto JS comum
         const formData = new FormData(formElement);
         const formJson = Object.fromEntries(formData.entries());
 
-        // Monta o objeto completo no formato exato que a API exige
         const payload = {
             ...formJson,
             orderDate: new Date().toISOString(),
@@ -88,24 +76,28 @@ export default class CheckoutProcess {
             tax: this.tax.toFixed(2)
         };
 
-        console.log("Enviando este payload para o servidor:", payload);
-
+        //Stretch Goals: Involves execution within the try/catch block and consumes alertMessage
         try {
-            // Envia para o método checkout criado no ExternalServices.mjs
             const response = await services.checkout(payload);
-            console.log("Sucesso! Resposta do servidor:", response);
-            alert("Pedido realizado com sucesso!");
+            console.log("Order success:", response);
 
-            // Limpa o carrinho após o sucesso (Opcional para esta etapa)
-            // localStorage.removeItem(this.key);
+            // Clears the local cart
+            localStorage.removeItem(this.key);
 
+            // Redirects the user to the created success page
+            window.location.href = "/checkout/sucess.html"; 
         } catch (error) {
-            // MELHORIA DE DEBUG: Imprime o erro detalhado vindo do servidor diretamente no console
-            console.error("Erro detalhado retornado pelo servidor:", error.message);
+            console.error("Captured error:", error);
 
-            // Tenta exibir a mensagem amigável do servidor se ela existir
-            const msgServidor = error.message?.message || "Verifique se todos os campos estão preenchidos corretamente.";
-            alert(`Erro no checkout: ${msgServidor}`);
+            // Iterates through the error keys returned from the server if there is a message object
+            if (error.name === "servicesError" && typeof error.message === "object") {
+                // Removes any old generic message and splits each backend error into individual alerts
+                for (const key in error.message) {
+                    alertMessage(`${key}: ${error.message[key]}`);
+                }
+            } else {
+                alertMessage("An error occurred during checkout. Please verify your details.");
+            }
         }
     }
 }
