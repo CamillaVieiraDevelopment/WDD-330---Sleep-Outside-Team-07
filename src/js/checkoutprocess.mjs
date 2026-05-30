@@ -76,7 +76,7 @@ export default class CheckoutProcess {
             tax: this.tax.toFixed(2)
         };
 
-        // Step 3 and Stretch Goals: Involves execution within the try/catch block and consumes alertMessage
+        //Stretch Goals: Involves execution within the try/catch block and consumes alertMessage
         try {
             const response = await services.checkout(payload);
             console.log("Order success:", response);
