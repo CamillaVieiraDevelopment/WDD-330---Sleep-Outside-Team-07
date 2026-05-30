@@ -1,13 +1,10 @@
 import { loadHeaderFooter } from "./utils.mjs";
 import CheckoutProcess from "./checkoutprocess.mjs";
 
-// Ensures the header and footer load before initiating the checkout
 loadHeaderFooter().then(() => {
-    // Instantiates the class, passing the localStorage key and the HTML container selector
     const checkout = new CheckoutProcess("so-cart", ".checkout-container");
     checkout.init();
 
-    // Listens for when the user leaves the ZIP Code field to calculate totals dynamically
     const zipInput = document.getElementById("zip");
     if (zipInput) {
         zipInput.addEventListener("blur", () => {
@@ -15,12 +12,22 @@ loadHeaderFooter().then(() => {
         });
     }
 
-    // CORREÇÃO: Escuta o evento submit do formulário de maneira independente do zipInput
+    //Manual validation before invoking the asynchronous submission process
     const form = document.getElementById("checkout-form");
-    if (form) {
-        form.addEventListener("submit", (event) => {
+    const submitBtn = document.getElementById("checkout-submit");
+
+    if (submitBtn && form) {
+        submitBtn.addEventListener("click", (event) => {
             event.preventDefault();
-            checkout.checkout(form);
+
+            // Checks HTML5 rules (required, patterns)
+            const chk_status = form.checkValidity();
+            form.reportValidity();
+
+            // Only executes the checkout if the form is 100% valid
+            if (chk_status) {
+                checkout.checkout(form);
+            }
         });
     }
 });

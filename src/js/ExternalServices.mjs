@@ -1,33 +1,30 @@
-// Official cloud server provided by the course guidelines
 const baseURL = "https://wdd330-backend.onrender.com/";
 
 async function convertToJson(res) {
-  const data = await res.json();
+  // Converts the response before checking if everything is OK to capture API messages
+  const jsonResponse = await res.json();
+
   if (res.ok) {
-    return data;
+    return jsonResponse;
   } else {
-    throw { name: "servicesError", message: data };
+    // Throws a custom object with a name and the structured message from the server
+    throw { name: "servicesError", message: jsonResponse };
   }
 }
 
 export default class ExternalServices {
   constructor() { }
 
-  // Fetches the product list directly from the external cloud API
   async getData(category) {
     const response = await fetch(baseURL + `products/search/${category}`);
-    const data = await convertToJson(response);
-    return data.Result; // Returns the product array (tents, backpacks, etc.)
+    return await convertToJson(response).then(data => data.Result);
   }
 
-  // Fetches the details of a specific product by ID from the cloud
   async findProductById(id) {
     const response = await fetch(baseURL + `product/${id}`);
-    const data = await convertToJson(response);
-    return data.Result;
+    return await convertToJson(response).then(data => data.Result);
   }
 
-  // Checkout POST submission method created in Step 4/6
   async checkout(payload) {
     const options = {
       method: "POST",
