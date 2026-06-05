@@ -3,6 +3,9 @@ import {
   setLocalStorage,
   loadHeaderFooter,
 } from "./utils.mjs";
+import { renderWishlist } from "./wishlist.js";
+
+renderWishlist();
 
 export function updateCartCount() {
   const cartItems = getLocalStorage("so-cart") || [];
