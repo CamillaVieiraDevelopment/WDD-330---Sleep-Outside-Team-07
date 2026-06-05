@@ -4,7 +4,6 @@ import {
   loadHeaderFooter,
 } from "./utils.mjs";
 
-// Function to update the cart count badge in the header
 export function updateCartCount() {
   const cartItems = getLocalStorage("so-cart") || [];
   const totalCount = cartItems.reduce((sum, item) => sum + (item.Quantity || 1), 0);
@@ -30,11 +29,7 @@ function cartItemTemplate(item) {
 
     <div class="cart-card__quantity-controls">
       <button class="quantity-btn decrease" data-id="${item.Id}">-</button>
-  
-      <span class="cart-card__quantity">
-        qty: ${item.Quantity || 1}
-      </span>
-
+      <span class="cart-card__quantity">qty: ${item.Quantity || 1}</span>
       <button class="quantity-btn increase" data-id="${item.Id}">+</button>
     </div>
     
@@ -50,7 +45,6 @@ function renderCartContents() {
 
   if (!cartList) return;
 
-  // If the cart is empty
   if (cartItems.length === 0) {
     cartList.innerHTML = "<li><b>Your cart is empty</b></li>";
     totalElements.forEach(el => el.textContent = "0.00");
@@ -58,101 +52,65 @@ function renderCartContents() {
     return;
   }
 
-  // 1. Render items using the template with the X
   const htmlItems = cartItems.map((item) => cartItemTemplate(item));
   cartList.innerHTML = htmlItems.join("");
 
-  // 2. Calcular el total multiplicando el FinalPrice por la Quantity de cada artículo
   const total = cartItems.reduce((sum, item) => sum + (item.FinalPrice * (item.Quantity || 1)), 0);
-
-  // 3. Insert the formatted total into all total elements safely
   totalElements.forEach(el => el.textContent = total.toFixed(2));
 
-  // CORREÇÃO: Mostra o rodapé com o botão de checkout removendo a classe 'hid'
   if (cartFooter) {
     cartFooter.classList.remove("hid");
   }
-
-  // 4. Activate the X and quantity button listeners
-  attachRemoveListeners();
-  attachQuantityListeners();
-
-  function attachQuantityListeners() {
-    const increaseButtons = document.querySelectorAll(".increase");
-    const decreaseButtons = document.querySelectorAll(".decrease");
-
-    increaseButtons.forEach((button) => {
-      button.addEventListener("click", increaseQuantity);
-    });
-
-    decreaseButtons.forEach((button) => {
-      button.addEventListener("click", decreaseQuantity);
-    });
-  }
-
-  function increaseQuantity(event) {
-    const productId = event.target.getAttribute("data-id");
-    let cartItems = getLocalStorage("so-cart") || [];
-
-    const item = cartItems.find((item) => item.Id === productId);
-
-    if (item) {
-      item.Quantity = (item.Quantity || 1) + 1;
-    }
-
-    setLocalStorage("so-cart", cartItems);
-    renderCartContents();
-    updateCartCount();
-  }
-
-  function decreaseQuantity(event) {
-    const productId = event.target.getAttribute("data-id");
-    let cartItems = getLocalStorage("so-cart") || [];
-
-    const itemIndex = cartItems.findIndex((item) => item.Id === productId);
-
-    if (itemIndex !== -1) {
-      if (cartItems[itemIndex].Quantity > 1) {
-        cartItems[itemIndex].Quantity -= 1;
-      } else {
-        cartItems.splice(itemIndex, 1);
-      }
-    }
-
-    setLocalStorage("so-cart", cartItems);
-    renderCartContents();
-    updateCartCount();
-  }
 }
 
-function attachRemoveListeners() {
-  const removeButtons = document.querySelectorAll(".cart-card__remove");
-  removeButtons.forEach((button) => {
-    button.addEventListener("click", removeFromCart);
+// Delegación de eventos: un solo listener para todo el contenedor
+function setupCartListeners() {
+  const cartList = document.querySelector(".product-list.cart-list");
+  if (!cartList) return;
+
+  cartList.addEventListener("click", (event) => {
+    const target = event.target;
+    const productId = target.getAttribute("data-id");
+
+    if (target.classList.contains("increase")) {
+      updateQuantity(productId, 1);
+    } else if (target.classList.contains("decrease")) {
+      updateQuantity(productId, -1);
+    } else if (target.classList.contains("cart-card__remove")) {
+      removeFromCart(productId);
+    }
   });
 }
 
-function removeFromCart(event) {
-  const productId = event.target.getAttribute("data-id");
+function updateQuantity(productId, change) {
   let cartItems = getLocalStorage("so-cart") || [];
-
-  const itemIndex = cartItems.findIndex((item) => item.Id === productId);
+  const itemIndex = cartItems.findIndex((item) => String(item.Id) === String(productId));
 
   if (itemIndex !== -1) {
-    if (cartItems[itemIndex].Quantity > 1) {
-      cartItems[itemIndex].Quantity -= 1;
-    } else {
+    cartItems[itemIndex].Quantity = (cartItems[itemIndex].Quantity || 1) + change;
+    
+    // Si la cantidad llega a 0, eliminar el producto
+    if (cartItems[itemIndex].Quantity <= 0) {
       cartItems.splice(itemIndex, 1);
     }
-
-    setLocalStorage("so-cart", cartItems);
-    renderCartContents();
-    updateCartCount();
   }
+
+  setLocalStorage("so-cart", cartItems);
+  renderCartContents();
+  updateCartCount();
 }
 
-// Ensures the Header/Footer is loaded before rendering the cart
+function removeFromCart(productId) {
+  let cartItems = getLocalStorage("so-cart") || [];
+  cartItems = cartItems.filter((item) => String(item.Id) !== String(productId));
+
+  setLocalStorage("so-cart", cartItems);
+  renderCartContents();
+  updateCartCount();
+}
+
 loadHeaderFooter().then(() => {
   renderCartContents();
   updateCartCount();
+  setupCartListeners(); // Inicializamos los listeners una vez
 });
