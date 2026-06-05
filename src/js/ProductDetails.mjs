@@ -26,6 +26,10 @@ export default class ProductDetails {
     document
       .getElementById("addToCart")
       .addEventListener("click", this.addToCart.bind(this));
+
+    document
+      .getElementById("addToWishlist")
+      .addEventListener("click", this.addToWishlist.bind(this));
   }
 
 
@@ -78,12 +82,50 @@ export default class ProductDetails {
     }
   }
 
+  addToWishlist() {
+    // 1. Obtener la wishlist actual (usando tu utilidad)
+    let wishlistItems = getLocalStorage("so-wishlist") || [];
+
+    // 2. Verificar si el producto ya está en la wishlist
+    const existingItem = wishlistItems.find((item) => item.Id === this.product.Id);
+
+    const wishlistBtn = document.getElementById("addToWishlist");
+    const originalText = wishlistBtn.innerText;
+
+    if (!existingItem) {
+      // 3. Si es nuevo, lo empujamos al array y guardamos
+      wishlistItems.push(this.product);
+      setLocalStorage("so-wishlist", wishlistItems);
+
+      // Micro-interacción: Estado de éxito
+      if (wishlistBtn) {
+        wishlistBtn.innerText = "Added to Wishlist! ❤️";
+        wishlistBtn.classList.add("btn-added"); // Reutilizamos tu clase CSS
+        wishlistBtn.disabled = true;
+
+        setTimeout(() => {
+          wishlistBtn.innerText = originalText;
+          wishlistBtn.classList.remove("btn-added");
+          wishlistBtn.disabled = false;
+        }, 2000);
+      }
+    } else {
+      // 4. Si ya existe, le damos retroalimentación al usuario
+      if (wishlistBtn) {
+        wishlistBtn.innerText = "Already in Wishlist! 🤍";
+        wishlistBtn.disabled = true;
+
+        setTimeout(() => {
+          wishlistBtn.innerText = originalText;
+          wishlistBtn.disabled = false;
+        }, 2000);
+      }
+    }
+  }
+
   renderProductDetails(selector) {
-    // Generates HTML using the properties of this.product object
-    // This replaces the need for files like "marmot-ajax-3.html". The data comes from JSON and fills this template.
     const element = document.querySelector(selector);
 
-    // Property names (Brand.Name, NameWithoutBrand, etc.) are based on the structure of your JSON file.
     const html = `
       <section class="product-detail">
         <h3>${this.product.Brand.Name}</h3>
@@ -98,11 +140,15 @@ export default class ProductDetails {
         <p class="product__description">
           ${this.product.DescriptionHtmlSimple}
         </p>
-        <div class="product-detail__add">
-          <button id="addToCart" data-id="${this.product.Id}">Add to Cart</button>
+        
+        <!-- Aquí colocas el contenedor contenedor con sus nuevas clases -->
+        <div class="product-detail__actions">
+          <button id="addToCart" class="btn-primary" data-id="${this.product.Id}">Add to Cart</button>
+          <button id="addToWishlist" class="btn-secondary" data-id="${this.product.Id}">❤️ Add to Wishlist</button>
         </div>
       </section>`;
 
     element.insertAdjacentHTML("afterBegin", html);
   }
 }
+
