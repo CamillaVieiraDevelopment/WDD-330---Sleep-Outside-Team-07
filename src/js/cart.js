@@ -48,7 +48,7 @@ function cartItemTemplate(item) {
   return newItem;
 }
 
-renderCartContents();
+renderCartContents()
 // import { getLocalStorage, renderListWithTemplate, loadHeaderFooter } from "./utils.mjs";
 
 // function cartItemTemplate(item) {
