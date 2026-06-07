@@ -1,15 +1,14 @@
 :root {
   --font-body: Arial, Helvetica, sans-serif;
   --font-headline: Haettenschweiler, "Arial Narrow Bold", sans-serif;
-  
-  /* Colors */
+  /* colors */
   --primary-color: #f0a868;
   --secondary-color: #525b0f;
   --tertiary-color: #8a470c;
   --light-grey: #d0d0d0;
   --dark-grey: #303030;
 
-  /* Sizes */
+  /* sizes */
   --font-base: 18px;
   --small-font: 0.8em;
   --large-font: 1.2em;
@@ -31,18 +30,14 @@ img {
   max-width: 100%;
 }
 
-p {
-  padding: 0.75rem;
-}
-
-/* ==========================================================================
-   Layout Header & Navigation
-   ========================================================================== */
-
 header {
   display: flex;
   justify-content: space-between;
   padding: 0.5rem;
+}
+
+p {
+  padding: 0.75rem;
 }
 
 .logo {
@@ -80,7 +75,9 @@ header {
   font-size: var(--small-font);
   width: 110px;
   height: 80px;
+
   flex-direction: column;
+  align-items: flex-end;
   box-shadow: 1px 1px 4px var(--light-grey);
   justify-content: center;
   align-items: center;
@@ -93,14 +90,33 @@ header {
   margin-top: -1.3em;
 }
 
-.logo--square > div {
+.logo--square>div {
   margin-top: -1.7em;
 }
 
-/* ==========================================================================
-   Cart Icon & Header Badge
-   ========================================================================== */
+/* utility classes */
+.highlight {
+  color: var(--tertiary-color);
+}
 
+button {
+  padding: 0.5em 2em;
+  background-color: var(--secondary-color);
+  color: white;
+  margin: auto;
+  display: block;
+  border: 0;
+  font-size: var(--large-font);
+  cursor: pointer;
+}
+
+.divider {
+  border-bottom: 2px solid var(--primary-color);
+}
+
+/* End utility classes */
+
+/* Cart icon styles */
 .cart {
   padding-top: 1em;
   position: relative;
@@ -115,72 +131,7 @@ header {
   fill: gray;
 }
 
-.cart-icon-wrapper {
-  position: relative;
-  display: inline-block;
-}
-
-.cart-count {
-  position: absolute;
-  top: -6px;
-  right: -8px;
-  background-color: #e07c24;
-  color: white;
-  font-size: 0.7rem;
-  font-weight: bold;
-  border-radius: 50%;
-  width: 18px;
-  height: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-}
-
-/* ==========================================================================
-   Utility Classes & Global Buttons
-   ========================================================================== */
-
-.highlight {
-  color: var(--tertiary-color);
-}
-
-.divider {
-  border-bottom: 2px solid var(--primary-color);
-}
-
-button {
-  padding: 0.5em 2em;
-  background-color: var(--secondary-color);
-  color: white;
-  margin: auto;
-  display: block;
-  border: 0;
-  font-size: var(--large-font);
-  cursor: pointer;
-  transition: filter 0.3s ease;
-}
-
-#addToCart:hover {
-  filter: brightness(85%);
-}
-
-#addToCart:active {
-  transform: scale(0.98);
-  transition: transform 0.09s ease;
-}
-
-.btn-added {
-  background-color: #d97706 !important;
-  color: #ffffff !important;
-  transform: scale(1.03);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
-}
-
-/* ==========================================================================
-   Homepage Components (Mission & Categories)
-   ========================================================================== */
+/* End cart icon styles */
 
 .mission {
   position: absolute;
@@ -200,38 +151,6 @@ button {
   text-align: center;
 }
 
-.category-grid {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin: 2rem 0;
-}
-
-.category-card {
-  text-decoration: none;
-  color: #303030;
-  text-align: center;
-  flex: 1;
-  min-width: 120px;
-  max-width: 200px;
-  padding-bottom: 60vh;
-}
-
-.category-card img {
-  width: 100px;
-  height: 100px;
-  transition: transform 0.2s ease;
-}
-
-.category-card img:hover {
-  transform: scale(1.1);
-}
-
-/* ==========================================================================
-   Product Catalog & Product Details
-   ========================================================================== */
-
 .products {
   margin-top: 2rem;
   padding: 1rem;
@@ -249,6 +168,7 @@ button {
   color: var(--dark-grey);
 }
 
+/* Styles for product lists */
 .product-card {
   flex: 1 1 45%;
   margin: 0.25em;
@@ -271,6 +191,8 @@ button {
   font-size: 1em;
 }
 
+/* End product list card */
+
 .product-detail {
   padding: 1em;
   max-width: 500px;
@@ -281,194 +203,42 @@ button {
   width: 100%;
 }
 
-/* ==========================================================================
-   Wishlist Display Module
-   ========================================================================== */
-
-.wishlist-container {
-  margin: 4rem 0 2rem 0;
-  padding: 1.5rem;
-  border-top: 2px dashed var(--light-grey);
-}
-
-.wishlist-container h2 {
-  text-align: center;
-  margin-bottom: 2rem;
-  font-family: var(--font-body);
-}
-
-.wishlist-card {
-  flex: 1 1 220px;
-  max-width: 260px;
-  margin: 1rem 0.5rem;
-  padding: 1rem;
-  border: 1px solid var(--light-grey);
-  border-radius: 6px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  text-align: center;
-  background-color: #ffffff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-}
-
-.wishlist-card img {
-  max-height: 140px;
-  object-fit: contain;
-  margin: 0 auto 1rem auto;
-}
-
-.wishlist-card h3 {
-  font-size: 0.95rem;
-  font-weight: normal;
-  margin-bottom: 0.5rem;
-  line-height: 1.3;
-  flex-grow: 1;
-}
-
-.wishlist-card .price {
-  font-weight: bold;
-  font-size: 1.1rem;
-  margin: 0.5rem 0 1rem 0;
-  padding: 0;
-}
-
-.wishlist-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 100%;
-}
-
-.wishlist-buttons button {
-  width: 100%;
-  margin: 0; 
-  padding: 0.6rem 1rem;
-  font-size: 0.9rem;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  transition: background-color 0.2s ease, transform 0.1s ease;
-}
-
-.wishlist-buttons .btn-move-to-cart {
-  background-color: var(--secondary-color);
-}
-
-.wishlist-buttons .btn-remove-wishlist {
-  background-color: #a32a2a; 
-}
-
-.wishlist-buttons button:hover {
-  filter: brightness(90%);
-}
-
-.wishlist-buttons button:active {
-  transform: scale(0.97);
-}
-
-/* ==========================================================================
-   Refactored Cart Card Module (Matches Wishlist Structural Layout)
-   ========================================================================== */
-
+/* Start cart list card styles */
 .cart-card {
-  flex: 1 1 220px;
-  max-width: 260px;
-  margin: 1rem 0.5rem;
-  padding: 1.2rem 1rem 1rem 1rem;
-  border: 1px solid var(--light-grey);
-  border-radius: 6px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  text-align: center;
-  background-color: #ffffff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  position: relative; 
+  display: grid;
+  grid-template-columns: 25% auto 15%;
+  font-size: var(--small-font);
+  /* max-height: 120px; */
+  align-items: center;
 }
 
 .cart-card__image {
-  max-height: 140px;
-  object-fit: contain;
-  margin: 0 auto 1rem auto;
-  display: block;
+  grid-row: 1/3;
+  grid-column: 1;
+}
+
+.cart-card p {
+  margin-top: 0;
 }
 
 .cart-card .card__name {
-  font-size: 0.95rem;
-  font-weight: normal;
-  margin-bottom: 0.25rem;
-  line-height: 1.3;
-  flex-grow: 1;
+  grid-row: 1;
+  grid-column: 2;
 }
 
 .cart-card__color {
-  font-size: 0.85rem;
-  color: #707070;
-  margin-bottom: 0.5rem;
-  padding: 0;
+  grid-row: 2;
+  grid-column: 2;
+}
+
+.cart-card__quantity {
+  grid-row: 1;
+  grid-column: 3;
 }
 
 .cart-card__price {
-  font-weight: bold;
-  font-size: 1.1rem;
-  margin: 0.25rem 0 0.75rem 0;
-  padding: 0;
-}
-
-.cart-card__quantity-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-top: auto;
-  padding: 0.25rem 0;
-  background-color: #f9f9f9;
-  border-radius: 4px;
-  border: 1px solid #eee;
-}
-
-.quantity-btn {
-  background-color: var(--light-grey);
-  border: none;
-  padding: 2px 10px;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: bold;
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
-}
-
-.quantity-btn:hover {
-  background-color: #b5b5b5;
-}
-
-.cart-card__remove {
-  position: absolute;
-  top: 8px;
-  right: 12px;
-  cursor: pointer;
-  font-size: 1.2rem;
-  color: #a32a2a;
-  user-select: none;
-  transition: transform 0.2s ease;
-  padding: 0;
-  margin: 0;
-}
-
-.cart-card__remove:hover {
-  transform: scale(1.25);
-}
-
-/* ==========================================================================
-   Footer & Global Media Queries
-   ========================================================================== */
-
-footer {
-  font-size: var(--small-font);
-  padding: 1em;
+  grid-row: 2;
+  grid-column: 3;
 }
 
 .hide {
@@ -487,65 +257,11 @@ footer {
 
   .cart-card {
     font-size: inherit;
+    grid-template-columns: 150px auto 15%;
   }
 }
 
-/* ==========================================================================
-   Product Detail Action Buttons
-   ========================================================================== */
-
-/* Contenedor flex para controlar el flujo y evitar el efecto escalera */
-.product-detail__actions {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;           /* Separación uniforme entre botones */
-  width: 100%;
-  max-width: 340px;    /* Evita que los botones se estiren infinitamente */
-  margin: 2rem auto;   /* Centra todo el bloque en la página */
-}
-
-/* Estilos compartidos para normalizar ambos botones */
-.product-detail__actions button {
-  width: 100% !important; /* Forzamos a que ambos midan exactamente lo mismo */
-  margin: 0 !important;   /* Removemos el margin auto global */
-  padding: 0.8rem 1.5rem;
-  font-size: 1.05rem;
-  font-weight: bold;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
-  transition: all 0.2s ease;
-}
-
-/* 🛒 BOTÓN PRINCIPAL: Add to Cart (Sólido y llamativo) */
-.product-detail__actions .btn-primary {
-  background-color: var(--secondary-color); /* Tu verde oliva */
-  color: white;
-  border: 2px solid var(--secondary-color);
-}
-
-.product-detail__actions .btn-primary:hover {
-  filter: brightness(90%);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-/* ❤️ BOTÓN SECUNDARIO: Add to Wishlist (Elegante estilo "Ghost") */
-.product-detail__actions .btn-secondary {
-  background-color: transparent !important;
-  color: var(--tertiary-color) !important; /* Usamos tu terracota/café para el texto */
-  border: 2px solid var(--tertiary-color) !important; /* Borde del mismo color */
-  box-shadow: none; /* Más limpio para la jerarquía secundaria */
-}
-
-.product-detail__actions .btn-secondary:hover {
-  background-color: #fdf6f0 !important; /* Un sutil fondo cálido al pasar el mouse */
-  filter: brightness(95%);
-}
-
-/* Efecto físico de clic para ambos */
-.product-detail__actions button:active {
-  transform: scale(0.98);
+footer {
+  font-size: var(--small-font);
+  padding: 1em;
 }
