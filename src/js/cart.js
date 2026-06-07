@@ -40,11 +40,16 @@ function cartItemTemplate(item) {
   </li>`;
 }
 
+<<<<<<< HEAD
 function renderCartContents() {
   const cartItems = getLocalStorage("so-cart") || [];
   const cartList = document.querySelector(".product-list.cart-list");
   const totalElements = document.querySelectorAll(".cart-total span, #cart-total");
   const cartFooter = document.querySelector(".cart-footer");
+=======
+renderCartContents()
+// import { getLocalStorage, renderListWithTemplate, loadHeaderFooter } from "./utils.mjs";
+>>>>>>> 4c65ac6303e7df835cc66c744766769559531746
 
   if (!cartList) return;
 
