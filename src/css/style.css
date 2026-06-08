@@ -245,6 +245,15 @@ button {
   display: none;
 }
 
+.category-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.category-grid img {
+  width: 120px;
+}
+
 @media screen and (min-width: 500px) {
   body {
     max-width: 1080px;
