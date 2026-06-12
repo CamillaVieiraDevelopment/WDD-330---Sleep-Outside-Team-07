@@ -1,4 +1,8 @@
-import { getLocalStorage, renderListWithTemplate, loadHeaderFooter } from "./utils.mjs";
+import {
+  getLocalStorage,
+  renderListWithTemplate,
+  loadHeaderFooter,
+} from "./utils.mjs";
 
 function cartItemTemplate(item) {
   // Ajuste de ruta de imagen (por si viene con "../")
@@ -28,7 +32,13 @@ function renderCartContents() {
   }
 
   // Renderizar los items
-  renderListWithTemplate(cartItemTemplate, cartList, cartItems, "afterbegin", true);
+  renderListWithTemplate(
+    cartItemTemplate,
+    cartList,
+    cartItems,
+    "afterbegin",
+    true,
+  );
 
   // Calcular y mostrar el total
   const total = cartItems.reduce((sum, item) => sum + item.FinalPrice, 0);

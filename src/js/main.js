@@ -6,7 +6,7 @@ import { updateCartCount } from "./cart.js";
 
 loadHeaderFooter().then(() => {
   updateCartCount();
-})
+});
 
 const dataSource = new ExternalServices("tents");
 const element = document.querySelector(".product-list");

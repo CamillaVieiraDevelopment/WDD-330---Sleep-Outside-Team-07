@@ -13,7 +13,9 @@ export function renderWishlist() {
   }
 
   // Generar el HTML para cada producto de la wishlist
-  const htmlItems = wishlistItems.map((item) => `
+  const htmlItems = wishlistItems
+    .map(
+      (item) => `
     <li class="wishlist-card">
       <img src="${item.Images.PrimaryMedium || item.Images.PrimaryLarge}" alt="${item.NameWithoutBrand}">
       <h3>${item.Brand.Name} ${item.NameWithoutBrand}</h3>
@@ -23,7 +25,9 @@ export function renderWishlist() {
         <button class="btn-remove-wishlist" data-id="${item.Id}">❌ Remove</button>
       </div>
     </li>
-  `).join("");
+  `,
+    )
+    .join("");
 
   element.innerHTML = htmlItems;
 
@@ -33,14 +37,14 @@ export function renderWishlist() {
 
 // 2. Escuchar los clics de "Mover" y "Eliminar"
 function attachWishlistEvents() {
-  document.querySelectorAll(".btn-move-to-cart").forEach(button => {
+  document.querySelectorAll(".btn-move-to-cart").forEach((button) => {
     button.addEventListener("click", (e) => {
       const productId = e.target.getAttribute("data-id");
       moveToCart(productId);
     });
   });
 
-  document.querySelectorAll(".btn-remove-wishlist").forEach(button => {
+  document.querySelectorAll(".btn-remove-wishlist").forEach((button) => {
     button.addEventListener("click", (e) => {
       const productId = e.target.getAttribute("data-id");
       removeFromWishlist(productId);
@@ -54,13 +58,13 @@ function moveToCart(productId) {
   let cart = getLocalStorage("so-cart") || [];
 
   // Encontrar el producto en la wishlist
-  const productIndex = wishlist.findIndex(item => item.Id === productId);
+  const productIndex = wishlist.findIndex((item) => item.Id === productId);
 
   if (productIndex !== -1) {
     const product = wishlist[productIndex];
 
     // Verificar si ya existe en el carrito para sumar cantidad o agregarlo de cero
-    const existingCartItem = cart.find(item => item.Id === productId);
+    const existingCartItem = cart.find((item) => item.Id === productId);
     if (existingCartItem) {
       existingCartItem.Quantity = (existingCartItem.Quantity || 1) + 1;
     } else {
@@ -77,8 +81,8 @@ function moveToCart(productId) {
 
     // Refrescar la pantalla para mostrar los cambios en ambas listas
     renderWishlist();
-    
-    // Si estás en la página del carrito, aquí también deberías mandar a 
+
+    // Si estás en la página del carrito, aquí también deberías mandar a
     // llamar la función que vuelve a pintar tu carrito y actualiza el Badge.
     location.reload(); // Truco rápido para refrescar todo el estado de la página
   }
@@ -87,7 +91,7 @@ function moveToCart(productId) {
 // 4. Eliminar directamente de la Wishlist
 function removeFromWishlist(productId) {
   let wishlist = getLocalStorage("so-wishlist") || [];
-  wishlist = wishlist.filter(item => item.Id !== productId);
+  wishlist = wishlist.filter((item) => item.Id !== productId);
   setLocalStorage("so-wishlist", wishlist);
   renderWishlist();
 }
